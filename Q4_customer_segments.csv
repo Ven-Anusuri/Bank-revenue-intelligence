@@ -1,0 +1,6 @@
+Customer_Segment,Total_Customers,Avg_Balance,Has_Mortgage,Has_Loan,Defaulters,Avg_Age
+Premium,192,30260.92,65,10,0,46.5
+High Value,2640,8339.79,1253,209,3,43.5
+Mid Value,11701,2248.58,6097,1402,16,42.5
+Low Value,26672,309.93,14864,4395,356,40.2
+Negative Balance,3743,-317.72,2717,1203,438,39.5

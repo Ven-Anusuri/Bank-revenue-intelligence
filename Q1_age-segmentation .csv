@@ -1,0 +1,7 @@
+Age_Group,Total_Customers,Avg_Balance,Has_Mortgage,Has_Personal_Loan,Defaulters
+18-25 Young Adults,1319,894.08,693,177,19
+26-35 Early Career,15466,1146.14,9584,2544,309
+36-45 Mid Career,13796,1321.1,8591,2154,258
+46-55 Peak Earners,9510,1468.39,4716,1716,175
+56-65 Pre Retirement,4121,1956.88,1392,624,51
+65+ Retirement,736,2791.87,20,4,1
