@@ -5,7 +5,7 @@
 
 ## 📊 Live Dashboard
 
-🔗 [View on Tableau Public](https://public.tableau.com/app/profile/ven.anusuri/viz/CustomerFinancialProfileAnalysisDashboard/CustomerFinancialProfileAnalysisDashboard?publish=yes)
+🔗 [View on Tableau Public](https://public.tableau.com/app/profile/ven.anusuri/viz/BankRevenueIntelligence-Cross-SellLeadPrioritization/RevenueIntelligence)
 
 ---
 
