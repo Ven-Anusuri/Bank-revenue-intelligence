@@ -1,17 +1,28 @@
 -- ============================================================
 -- BANK REVENUE INTELLIGENCE: Cross-Sell & Lead Prioritization
--- Dataset: 45,211 Bank Customers (Kaggle - Megasatish)
+-- Dataset: 45,211 Bank Customers -- UCI ML Repository "Bank Marketing"
+--          (Moro et al., 2014), Portuguese retail bank, 2008-2010
+--          Mirrored on Kaggle as "Bank Customer Dataset" (Megasatish)
 -- Tools: SQLite / DB Browser for SQLite
 -- Author: Ven Anusuri | Financial Advisor -> Data Analyst
 -- ============================================================
 -- PRODUCTS TRACKED:
 --   housing = Housing Loan (Mortgage)
 --   loan    = Personal Loan
--- REVENUE ASSUMPTIONS (conservative retail banking benchmarks):
---   Mortgage net interest contribution: ~$2,400/yr per customer
---   Personal loan net interest:         ~$800/yr per customer
---   Combined (no products -> both):     ~$3,200/yr per customer
+-- REVENUE ASSUMPTIONS (sourced from real 2026 market data):
+--   Mortgage net interest:  ~$5,164/yr/customer = $258,214 avg US mortgage
+--                           balance (Experian 2025) x 2% est. net spread
+--                           (30-yr rate 6.5%, Freddie Mac PMMS Jul 2026)
+--   Personal loan net int.: ~$1,053/yr/customer = $11,699 avg US unsecured
+--                           personal loan balance (TransUnion Q4 2025) x 9%
+--                           est. net spread (avg APR 12.3%, Bankrate Jul 2026)
+--   Combined (no products): ~$3,108/yr/customer = blended avg of above
 --   Conversion rates: No-products 10% | Loan X-sell 12% | Mortgage X-sell 8%
+--   (within 5-15% range typical for retail cross-sell campaigns per
+--   KPI Depot / Bain & Company benchmarks)
+--   NOTE: spread percentages (2%, 9%) are analyst estimates -- no public
+--   source breaks out NIM by individual retail product. Balances, rates,
+--   and conversion benchmarks above are directly sourced; see README.
 -- ============================================================
 
 
@@ -138,15 +149,15 @@ SELECT
     SUM(CASE WHEN housing = 'yes' AND loan = 'no'  THEN 1 ELSE 0 END)             AS Mortgage_Only_Customers,
     SUM(CASE WHEN housing = 'no'  AND loan = 'yes' THEN 1 ELSE 0 END)             AS Loan_Only_Customers,
     ROUND(SUM(CASE WHEN housing = 'no' AND loan = 'no' THEN 1 ELSE 0 END)
-          * 0.10 * 3200, 0)                                                         AS Est_Rev_No_Products,
+          * 0.10 * 3108, 0)                                                         AS Est_Rev_No_Products,
     ROUND(SUM(CASE WHEN housing = 'yes' AND loan = 'no' THEN 1 ELSE 0 END)
-          * 0.12 * 800, 0)                                                          AS Est_Rev_Loan_CrossSell,
+          * 0.12 * 1053, 0)                                                         AS Est_Rev_Loan_CrossSell,
     ROUND(SUM(CASE WHEN housing = 'no' AND loan = 'yes' THEN 1 ELSE 0 END)
-          * 0.08 * 2400, 0)                                                         AS Est_Rev_Mortgage_CrossSell,
+          * 0.08 * 5164, 0)                                                         AS Est_Rev_Mortgage_CrossSell,
     ROUND(
-        (SUM(CASE WHEN housing = 'no' AND loan = 'no' THEN 1 ELSE 0 END) * 0.10 * 3200) +
-        (SUM(CASE WHEN housing = 'yes' AND loan = 'no' THEN 1 ELSE 0 END) * 0.12 * 800) +
-        (SUM(CASE WHEN housing = 'no' AND loan = 'yes' THEN 1 ELSE 0 END) * 0.08 * 2400),
+        (SUM(CASE WHEN housing = 'no' AND loan = 'no' THEN 1 ELSE 0 END) * 0.10 * 3108) +
+        (SUM(CASE WHEN housing = 'yes' AND loan = 'no' THEN 1 ELSE 0 END) * 0.12 * 1053) +
+        (SUM(CASE WHEN housing = 'no' AND loan = 'yes' THEN 1 ELSE 0 END) * 0.08 * 5164),
     0)                                                                              AS Total_Revenue_Opportunity
 FROM Bank_Customer_Data
 GROUP BY job

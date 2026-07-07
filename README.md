@@ -11,16 +11,20 @@
 
 ## 📌 Project Overview
 
-This project transforms the financial profiles of **45,211 bank customers** into a working revenue intelligence system — identifying **~$8M in cross-sell opportunity** across product segments, scoring every customer for outreach priority, and assigning a data-driven Next Best Product recommendation.
+This project transforms the financial profiles of **45,211 bank customers** into a working revenue intelligence system — identifying **~$9.1M in cross-sell opportunity** across product segments, scoring every customer for outreach priority, and assigning a data-driven Next Best Product recommendation.
 
 Built from a former TD Bank financial advisor's perspective, this mirrors the actual workflow a bank analytics team would run before launching a cross-sell or retention campaign: segment the book, size the revenue gap, prioritize the leads, and tell the advisor exactly what to offer.
 
 **Products tracked:** Housing Loan (Mortgage) · Personal Loan
 
-**Revenue model assumptions** *(conservative retail banking benchmarks)*:
-- Mortgage net interest contribution: ~$2,400/yr per customer
-- Personal loan net interest: ~$800/yr per customer
-- Conversion rates: 10% (zero-product) · 12% (loan cross-sell) · 8% (mortgage cross-sell)
+**Revenue model assumptions** *(sourced from real market data, methodology below)*:
+- Mortgage net interest contribution: **~$5,164/yr per customer** — avg. U.S. mortgage balance of $258,214 ([Experian, 2025 State of Mortgage Debt](https://www.experian.com/blogs/ask-experian/research/cities-with-the-highest-mortgage-debt/)) × an estimated 2% net interest spread (mortgages are low-margin, low-risk secured lending; 30-yr rate averaged 6.5% per [Freddie Mac PMMS](https://www.freddiemac.com/pmms), Jul 2026)
+- Personal loan net interest: **~$1,053/yr per customer** — avg. U.S. unsecured personal loan balance of $11,699 ([TransUnion, Q4 2025](https://www.lendingtree.com/personal/personal-loans-statistics/)) × an estimated 9% net interest spread (personal loans are higher-risk, higher-margin unsecured lending; avg. APR is 12.3% per [Bankrate](https://www.bankrate.com/loans/personal-loans/average-personal-loan-rates/), Jul 2026)
+- First-product value for zero-product customers: **~$3,108/yr** — blended average of the two figures above, since a zero-product customer's first product could reasonably be either
+- Conversion rates: 10% (zero-product) · 12% (loan cross-sell) · 8% (mortgage cross-sell) — within the 5–15% range typical for outbound retail banking cross-sell campaigns ([KPI Depot benchmarks](https://kpidepot.com/kpi/up-sell-cross-sell-conversion-rate); [Bain & Company](https://www.bain.com/insights/reinvigorate-cross-selling/))
+- Industry context: U.S. bank net interest margin was 3.39% in Q4 2025, the highest since 2019 ([FDIC Quarterly Banking Profile](https://www.fdic.gov/quarterly-banking-profile/quarterly-banking-profile-q4-2025))
+
+> **Note on methodology:** No public source breaks out net interest margin by individual retail product (mortgage vs. personal loan), so the 2%/9% spreads above are analyst estimates grounded in the well-documented fact that secured mortgage lending runs thinner margins than unsecured consumer lending. All balances, rates, and NIM figures are directly sourced; the spread percentages are stated assumptions, not published statistics.
 
 ---
 
@@ -38,9 +42,9 @@ Built from a former TD Bank financial advisor's perspective, this mirrors the ac
 
 ## 💡 Key Revenue Insights
 
-- **~$8M total cross-sell opportunity** exists across the 45,211-customer book at conservative conversion rates
-- **Management segment alone represents $1.83M** — 4,206 customers with zero products and an avg balance of $1,766
-- **Blue-collar is the hidden mortgage cross-sell play** — 5,890 mortgage-only customers eligible for personal loan, worth ~$565K at 12% conversion
+- **~$9.1M total cross-sell opportunity** exists across the 45,211-customer book, using sourced 2026 mortgage/personal loan interest rates and balances
+- **Management segment alone represents $2.03M** — 4,206 customers with zero products and an avg balance of $1,766
+- **Blue-collar is the hidden mortgage cross-sell play** — 5,890 mortgage-only customers eligible for personal loan, worth ~$744K at 12% conversion
 - **Retired segment has a 69.1% zero-product rate** despite the highest avg balance among mid-tier segments ($1,977) — strongest Term Deposit / GIC opportunity
 - **Students show 72.5% zero-product rate** — lowest absolute revenue but critical for long-term customer lifetime value
 - **Premium customers (balance >$20K, 192 total, zero defaulters)** score HOT on lead tier — wealth management and bundled products next
@@ -81,17 +85,17 @@ The #1 KPI in retail banking. Calculates avg products per customer by segment vs
 | blue-collar | 0.90 | 1.10 | 21.9% |
 
 **Q6 — Revenue Opportunity Sizing**
-Converts product gaps into dollars. Three opportunity pools per segment: zero-product customers, mortgage-only customers eligible for personal loan, and loan-only customers eligible for mortgage. Conservative conversion rates applied throughout.
+Converts product gaps into dollars using sourced mortgage/personal loan net interest and market-benchmarked conversion rates (see Revenue model assumptions above). Three opportunity pools per segment: zero-product customers, mortgage-only customers eligible for personal loan, and loan-only customers eligible for mortgage.
 
 | Segment | Total Opportunity |
 |---------|-------------------|
-| management | $1,829,376 |
-| technician | $1,361,280 |
-| blue-collar | $1,350,912 |
-| admin. | $826,624 |
-| services | $617,376 |
-| retired | $571,104 |
-| **All segments** | **~$8,000,000** |
+| management | $2,030,579 |
+| blue-collar | $1,632,028 |
+| technician | $1,541,850 |
+| admin. | $975,355 |
+| services | $740,366 |
+| retired | $614,351 |
+| **All segments** | **~$9,104,153** |
 
 **Q7 — Next Best Product (NBP) Assignment**
 Rule-based product recommendation engine. Logic matrix: `life stage (age) + current products held + balance threshold`. Defaulters excluded. Output drives advisor talking points and CRM campaign targeting.
@@ -176,13 +180,13 @@ SELECT
     SUM(CASE WHEN housing = 'no' AND loan = 'no' THEN 1 ELSE 0 END) AS No_Product_Customers,
     SUM(CASE WHEN housing = 'yes' AND loan = 'no' THEN 1 ELSE 0 END) AS Mortgage_Only_Customers,
     SUM(CASE WHEN housing = 'no' AND loan = 'yes' THEN 1 ELSE 0 END) AS Loan_Only_Customers,
-    ROUND(SUM(CASE WHEN housing = 'no' AND loan = 'no' THEN 1 ELSE 0 END) * 0.10 * 3200, 0) AS Est_Rev_No_Products,
-    ROUND(SUM(CASE WHEN housing = 'yes' AND loan = 'no' THEN 1 ELSE 0 END) * 0.12 * 800, 0) AS Est_Rev_Loan_CrossSell,
-    ROUND(SUM(CASE WHEN housing = 'no' AND loan = 'yes' THEN 1 ELSE 0 END) * 0.08 * 2400, 0) AS Est_Rev_Mortgage_CrossSell,
+    ROUND(SUM(CASE WHEN housing = 'no' AND loan = 'no' THEN 1 ELSE 0 END) * 0.10 * 3108, 0) AS Est_Rev_No_Products,
+    ROUND(SUM(CASE WHEN housing = 'yes' AND loan = 'no' THEN 1 ELSE 0 END) * 0.12 * 1053, 0) AS Est_Rev_Loan_CrossSell,
+    ROUND(SUM(CASE WHEN housing = 'no' AND loan = 'yes' THEN 1 ELSE 0 END) * 0.08 * 5164, 0) AS Est_Rev_Mortgage_CrossSell,
     ROUND(
-        (SUM(CASE WHEN housing = 'no' AND loan = 'no' THEN 1 ELSE 0 END) * 0.10 * 3200) +
-        (SUM(CASE WHEN housing = 'yes' AND loan = 'no' THEN 1 ELSE 0 END) * 0.12 * 800) +
-        (SUM(CASE WHEN housing = 'no' AND loan = 'yes' THEN 1 ELSE 0 END) * 0.08 * 2400),
+        (SUM(CASE WHEN housing = 'no' AND loan = 'no' THEN 1 ELSE 0 END) * 0.10 * 3108) +
+        (SUM(CASE WHEN housing = 'yes' AND loan = 'no' THEN 1 ELSE 0 END) * 0.12 * 1053) +
+        (SUM(CASE WHEN housing = 'no' AND loan = 'yes' THEN 1 ELSE 0 END) * 0.08 * 5164),
     0) AS Total_Revenue_Opportunity
 FROM Bank_Customer_Data
 GROUP BY job
@@ -251,15 +255,16 @@ ORDER BY HOT_Leads DESC;
 
 - **SQL (SQLite / DB Browser for SQLite)** — Segmentation, PPR, revenue sizing, NBP logic, lead scoring
 - **Tableau Public** — Dashboard design and visualization
-- **Kaggle** — Source dataset (Bank Customer Dataset)
+- **Kaggle / UCI Machine Learning Repository** — Source dataset (Bank Marketing, Moro et al. 2014)
 
 ---
 
 ## 📂 Data Source
 
-- **Dataset:** [Bank Customer Dataset](https://www.kaggle.com/datasets/megasatish/bank-customer-dataset) — Kaggle (Megasatish)
+- **Dataset:** [Bank Customer Dataset](https://www.kaggle.com/datasets/megasatish/bank-customer-dataset) — Kaggle mirror of the original **UCI Machine Learning Repository "Bank Marketing" dataset** ([Moro, S., Cortez, P., & Rita, P., 2014](https://archive.ics.uci.edu/dataset/222/bank+marketing), *Decision Support Systems*), collected from a Portuguese retail bank's telemarketing campaigns, 2008–2010
 - **Records:** 45,211 customers
 - **Features:** Age, Job, Education, Balance, Housing Loan, Personal Loan, Defaulter status
+- **Note:** the `balance` field is the customer's average yearly account balance in **EUR** as originally recorded (2008–2010). This project uses it only for relative segmentation (who holds the most wealth, by segment) — the dollar revenue model above is calibrated separately against current (2026) U.S. mortgage/personal loan market data, since the two are not on the same currency or time basis.
 
 ---
 
@@ -277,6 +282,19 @@ ORDER BY HOT_Leads DESC;
 ├── Q5_product_penetration_rate.csv        ← PPR by job segment ★ New
 └── Q6_revenue_opportunity_sizing.csv      ← Revenue gap in dollars ★ New
 ```
+
+---
+
+## 📚 Sources & Citations
+
+- [Freddie Mac Primary Mortgage Market Survey](https://www.freddiemac.com/pmms) — avg. 30-yr mortgage rate
+- [Experian: Cities With the Highest Mortgage Debt, 2025](https://www.experian.com/blogs/ask-experian/research/cities-with-the-highest-mortgage-debt/) — avg. U.S. mortgage balance
+- [Bankrate: Average Personal Loan Interest Rates](https://www.bankrate.com/loans/personal-loans/average-personal-loan-rates/) — avg. personal loan APR
+- [LendingTree / TransUnion: Personal Loan Statistics 2026](https://www.lendingtree.com/personal/personal-loans-statistics/) — avg. unsecured personal loan balance
+- [FDIC Quarterly Banking Profile, Q4 2025](https://www.fdic.gov/quarterly-banking-profile/quarterly-banking-profile-q4-2025) — industry net interest margin
+- [KPI Depot: Up-Sell and Cross-Sell Conversion Rate Benchmarks](https://kpidepot.com/kpi/up-sell-cross-sell-conversion-rate) — cross-sell conversion benchmarks
+- [Bain & Company: Reinvigorate Cross-Selling](https://www.bain.com/insights/reinvigorate-cross-selling/) — retail banking cross-sell performance
+- [UCI Machine Learning Repository: Bank Marketing Dataset](https://archive.ics.uci.edu/dataset/222/bank+marketing) — original dataset citation (Moro et al., 2014)
 
 ---
 
