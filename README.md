@@ -48,7 +48,7 @@ Built from a former TD Bank financial advisor's perspective, this mirrors the ac
 - **Retired segment has a 69.1% zero-product rate** despite the highest avg balance among mid-tier segments ($1,977) — strongest Term Deposit / GIC opportunity
 - **Students show 72.5% zero-product rate** — lowest absolute revenue but critical for long-term customer lifetime value
 - **Premium customers (balance >$20K, 192 total, zero defaulters)** score HOT on lead tier — wealth management and bundled products next
-- **3,743 customers with negative balances** are flagged and excluded from cross-sell targeting — routed to credit recovery
+- **3,743 customers with negative balances are excluded from revenue targeting, not from contact — routed to credit recovery, where consolidation or restructuring solutions can be offered under suitability review rather than as sales targets
 
 ---
 
@@ -68,7 +68,7 @@ Identifies the top 20 highest-avg-balance education/job combinations. Tertiary-e
 Counts No-Products / Mortgage-Only / Loan-Only / Both per segment. The raw input used to calculate PPR and revenue gaps in Q5–Q6.
 
 **Q4 — Customer Value Tier Segmentation**
-Classifies all customers into Premium / High / Mid / Low / Negative balance tiers. Defaulter concentration is highest in Negative (-$317 avg) — zero overlap with cross-sell lists.
+Classifies all customers into Premium / High / Mid / Low / Negative balance tiers. Defaulter concentration is highest in Negative (-$317 avg) — zero overlap with cross-sell lists.Negative-balance customers are removed from cross-sell lists for both credit risk and suitability reasons: marketing credit to distressed customers belongs in a remediation conversation with affordability checks, not a revenue campaign
 
 ### Layer 3 — Revenue Intelligence (Q5–Q8) ★ New
 
