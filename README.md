@@ -11,7 +11,7 @@
 
 ## 📌 Project Overview
 
-This project transforms the financial profiles of **45,211 bank customers** into a working revenue intelligence system — identifying **~$9.1M in cross-sell opportunity** across product segments, scoring every customer for outreach priority, and assigning a data-driven Next Best Product recommendation.
+This project transforms the financial profiles of **44,948 bank customers** into a working revenue intelligence system — identifying **~$9.1M in cross-sell opportunity** across product segments, scoring every customer for outreach priority, and assigning a data-driven Next Best Product recommendation.
 
 Built from a former TD Bank financial advisor's perspective, this mirrors the actual workflow a bank analytics team would run before launching a cross-sell or retention campaign: segment the book, size the revenue gap, prioritize the leads, and tell the advisor exactly what to offer.
 
